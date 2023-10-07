@@ -1,14 +1,11 @@
-#ifndef LIST
-#define LIST
+#ifndef LIST_H
+#define LIST_H
 
 #include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
 
-typedef struct List{
-    Node *ini;
-    Node *fin;
-    uint32_t n_elems;
-}List;
+#define LIST_DEBUG
 
 typedef struct Node{
     struct Node* next;
@@ -16,19 +13,29 @@ typedef struct Node{
     void* data;
 }Node;
 
+typedef struct List{
+    Node *init;
+    Node *last;
+    uint32_t n_elems;
+}List;
+
 // Initialization of the list
 int8_t init_list(List* l);
 
 // Add a node into the selected position
-int8_t add_value(List* l, void *v, uint32_t pos);
+int8_t add_node(List* l, void *v, uint32_t pos);
 
 // Delete a node form the list
-int8_t delete_node(List* l, void *v, uint32_t pos);
+int8_t delete_node(List* l, void **v, uint32_t pos);
 
 // Get the total of nodes of the list 
 int8_t get_total_nodes(List* l);
 
 // Get value in the position indicated 
-int8_t get_value(List* l, void* v, uint32_t pos);
+int8_t get_value(List* l, void** v, uint32_t pos);
 
-#endif LIST
+#if defined LIST_DEBUG
+void print_node_list_value(List* l);
+#endif
+
+#endif //LIST

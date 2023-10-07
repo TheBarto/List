@@ -1,5 +1,7 @@
 #include "List.h"
 
+#include <stdio.h>
+
 // Initialization of the list
 int8_t init_list(List* l)
 {
@@ -14,7 +16,7 @@ int8_t init_list(List* l)
 }
 
 // Add a node into the selected position
-int8_t add_value(List* l, void *v, uint32_t pos)
+int8_t add_node(List* l, void *v, uint32_t pos)
 {
     if(!l || !v)
     {
@@ -28,36 +30,37 @@ int8_t add_value(List* l, void *v, uint32_t pos)
     }
     memset(n, 0, sizeof(Node));
 
-    if(pos > l->n_elems)
+    n->data = v; 
+    if(!l->init)
+    {
+        l->init = n;
+        l->last = n;
+    }
+    else if(pos >= l->n_elems)
     {
         n->prev = l->last;
-        l->last->next = n;
+        if(l->last)
+            l->last->next = n;
         l->last = n;
     }
     else
     {
-        Node* aux = l->first;
-        for(uint32_t i = 0; ((i < pos) && (aux)); aux = aux->next);
-        aux->value = val;
+        Node* aux = l->init;
+        for(uint32_t i = 0; ((i < pos) && (aux)); i++, aux = aux->next);
 
         n->next = aux;
+        if(aux->prev) aux->prev->next = n;
+        else l->init = n;
         n->prev = aux->prev;
-        if(aux->prev)
-        {
-            aux->prev->next = n;
-            aux->prev = n;
-        }
-        else
-        {
-            l->first = n;
-        }
+        aux->prev = n;
     }
+    l->n_elems++;
 
     return 0;
 }
 
 // Delete a node form the list
-int8_t delete_node(List* l, void *v, uint32_t pos)
+int8_t delete_node(List* l, void **v, uint32_t pos)
 {
     if(!l || !v)
     {
@@ -68,8 +71,8 @@ int8_t delete_node(List* l, void *v, uint32_t pos)
     {
         return -1;
     }
-    Node *aux = l->first;
-    for(uint32_t i = 0; ((i < pos) && (!aux)); aux = aux->next);
+    Node *aux = l->init;
+    for(uint32_t i = 0; ((i < pos) && (aux)); i++, aux = aux->next);
 
     if(!aux->next)
         l->last = aux->prev;
@@ -77,14 +80,15 @@ int8_t delete_node(List* l, void *v, uint32_t pos)
         aux->next->prev = aux->prev;
 
     if(!aux->prev)
-        l->first = aux->next;
+        l->init = aux->next;
     else
         aux->prev->next = aux->next;
 
-    n->next = n->prev = NULL;
-    v = n->data;
+    aux->next = aux->prev = NULL;
+    *v = aux->data;
 
-    free(n);
+    free(aux);
+    l->n_elems--;
 
     return 0;
 }
@@ -101,7 +105,7 @@ int8_t get_total_nodes(List* l)
 }
 
 // Get value in the position indicated 
-int8_t get_value(List* l, void* v, uint32_t pos)
+int8_t get_value(List* l, void** v, uint32_t pos)
 {
     if(!l || !v)
     {
@@ -113,12 +117,25 @@ int8_t get_value(List* l, void* v, uint32_t pos)
         return -1;
     }
 
-    Node* n = l->first;
+    Node* n = l->init;
 
-    for(uint32_t i = 0; i < pos; i++, n=n->next);
-
-    v = n->data;
+    for(uint32_t i = 0; ((i < pos) && (n)); i++, n=n->next);
+    *v = n->data;
 
     return 0;
 }
 
+#if defined LIST_DEBUG 
+void print_node_list_value(List* l)
+{
+    Node* n = l->init;
+    uint32_t i = 0;
+
+    while(n)
+    {
+        printf("Node: %d - Val: %d \n", i, *(int32_t *)n->data);
+        n = n->next;
+        i++;
+    }
+}
+#endif
