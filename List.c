@@ -67,10 +67,11 @@ int8_t delete_node(List* l, void **v, uint32_t pos)
         return -1;
     }
 
-    if(pos > l->n_elems)
-    {
+    if(!l->n_elems)
+        return 0;
+    else if(pos > l->n_elems) 
         return -1;
-    }
+    
     Node *aux = l->init;
     for(uint32_t i = 0; ((i < pos) && (aux)); i++, aux = aux->next);
 
@@ -90,6 +91,10 @@ int8_t delete_node(List* l, void **v, uint32_t pos)
     free(aux);
     l->n_elems--;
 
+    if(!l->n_elems)
+    {
+        l->init = l->last = NULL;
+    }
     return 0;
 }
 

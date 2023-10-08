@@ -5,6 +5,8 @@
 
 typedef List Queue;
 
+int init_queue(Queue* q);
+
 int queue_value(Queue* q, void* v);
 
 int unqueue_value(Queue* q, void** v);

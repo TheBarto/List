@@ -1,6 +1,6 @@
 #include "Stack.h"
 
-int init_stack(Stack* s);
+int init_stack(Stack* s)
 {
     if(!s)
         return -1;
