@@ -143,4 +143,27 @@ void print_node_list_value(List* l)
         i++;
     }
 }
+
+Node* get_node(List* l, int pos)
+{
+    Node* n = l->init;
+    for(int i = 0; ((i < pos) && n); i++, n=n->next);
+
+    return n;
+}
+
+int swap_nodes(Node* n1, Node* n2, List* l)
+{
+    Node aux;
+    aux.prev = n1->prev;
+    aux.next = n1->next;
+
+   (n1->prev) ? (n1->prev->next = n2) : (l->init = n2);
+   (n1->next) ? (n1->next->prev = n2) : (l->last = n2); 
+
+   (aux.prev) ? (aux.prev->next = n1) : (l->init = n1);
+   (aux.next) ? (aux.next->prev = n1) : (l->last = n1); 
+
+   return 0;
+}
 #endif

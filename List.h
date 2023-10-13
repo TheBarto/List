@@ -34,6 +34,10 @@ int8_t get_total_nodes(List* l);
 // Get value in the position indicated 
 int8_t get_value(List* l, void** v, uint32_t pos);
 
+Node* get_node(List* l, int pos);
+
+int swap_nodes(Node* n1, Node* n2, List* l);
+
 #if defined LIST_DEBUG
 void print_node_list_value(List* l);
 #endif
