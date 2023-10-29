@@ -36,7 +36,8 @@ int8_t get_value(List* l, void** v, uint32_t pos);
 
 Node* get_node(List* l, int pos);
 
-int swap_nodes(Node* n1, Node* n2, List* l);
+int swap_nodes_by_pos(uint32_t pos1, uint32_t pos2, List* l);
+int move_node_by_pos(uint32_t node_pos, uint32_t final_pos, List* l);
 
 #if defined LIST_DEBUG
 void print_node_list_value(List* l);
