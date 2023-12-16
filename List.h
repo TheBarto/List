@@ -22,11 +22,17 @@ typedef struct List{
 // Initialization of the list
 int8_t init_list(List* l);
 
-// Add a node into the selected position
-int8_t add_node(List* l, void *v, uint32_t pos);
+int8_t add_d_node(List* l, void* v, uint32_t pos);
+// Add a node into the selected position. If n it's != NULL, use that one
+// and do not reserve dinamically another
+int8_t add_node(List* l, void *v, uint32_t pos, Node* n);
+int8_t internal_add_node(List* l, void *v, uint32_t pos, Node* n);
 
 // Delete a node form the list
-int8_t delete_node(List* l, void **v, uint32_t pos);
+// Delete an non dinamic node
+int8_t internal_delete_node(List* l, void **v, uint32_t pos, Node** fnode);
+uint8_t delete_node(List* l, void **v, uint32_t pos);
+uint8_t delete_d_node(List* l, void **v, uint32_t pos);
 
 // Get the total of nodes of the list 
 int8_t get_total_nodes(List* l);

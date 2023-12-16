@@ -6,28 +6,32 @@
 int8_t init_list(List* l)
 {
     if(!l)
-    {
         return -1;
-    }
 
     memset(l, 0, sizeof(List));
 
     return 0;
 }
 
-// Add a node into the selected position
-int8_t add_node(List* l, void *v, uint32_t pos)
-{
-    if(!l || !v)
-    {
-        return -1;
-    }
+int8_t add_d_node(List* l, void* v, uint32_t pos) {
     
     Node *n = (Node *)malloc(sizeof(Node));
     if(!n)
-    {
         return -1;
-    }
+ 
+    return internal_add_node(l, v, pos, n);
+}
+
+int8_t add_node(List* l, void* v, uint32_t pos, Node* n) {
+    return internal_add_node(l, v, pos, n);
+}
+
+// Add a node into the selected position
+int8_t internal_add_node(List* l, void *v, uint32_t pos, Node* n)
+{
+    if(!l || !v || !n)
+        return -1;
+    
     memset(n, 0, sizeof(Node));
 
     n->data = v; 
@@ -60,12 +64,10 @@ int8_t add_node(List* l, void *v, uint32_t pos)
 }
 
 // Delete a node form the list
-int8_t delete_node(List* l, void **v, uint32_t pos)
+int8_t internal_delete_node(List* l, void **v, uint32_t pos, Node** fnode)
 {
     if(!l || !v)
-    {
         return -1;
-    }
 
     if(!l->n_elems)
         return 0;
@@ -88,13 +90,25 @@ int8_t delete_node(List* l, void **v, uint32_t pos)
     aux->next = aux->prev = NULL;
     *v = aux->data;
 
-    free(aux);
+    if(fnode)
+        *fnode = aux;
     l->n_elems--;
 
     if(!l->n_elems)
-    {
         l->init = l->last = NULL;
-    }
+
+    return 0;
+}
+
+uint8_t delete_node(List* l, void **v, uint32_t pos) {
+    return internal_delete_node(l, v, pos, NULL);
+}
+
+uint8_t delete_d_node(List* l, void **v, uint32_t pos) {
+    Node *fnode = NULL;
+    internal_delete_node(l, v, pos, &fnode);
+    free(fnode);
+
     return 0;
 }
 
