@@ -7,32 +7,45 @@
 
 #define LIST_DEBUG
 
+#define GET_NODE_LIST(node, pos) do{ for(uint32_t i = 0; ((i < pos) && (node)); i++, node = node->next);}while(0)
+
+#define LIST_TOTAL_ELEMS(x) (x->n_elems)
+
 typedef struct Node{
-    struct Node* next;
-    struct Node* prev;
-    void* data;
+	struct Node* next;
+	struct Node* prev;
+	void* data;
 }Node;
 
 typedef struct List{
-    Node *init;
-    Node *last;
-    uint32_t n_elems;
+	Node *init;
+	Node *last;
+	uint32_t n_elems;
 }List;
 
 // Initialization of the list
 int8_t init_list(List* l);
 
-int8_t add_d_node(List* l, void* v, uint32_t pos);
+//Add a node at the end of the list
+int8_t add_d_node(List* l, void* v);
+//Add a dinamic node at the end of the list
+int8_t add_node(List* l, void *v, Node* n);
+
+//Add a dinamic node to the list
+int8_t add_d_pos_node(List* l, void* v, uint32_t pos);
 // Add a node into the selected position. If n it's != NULL, use that one
 // and do not reserve dinamically another
-int8_t add_node(List* l, void *v, uint32_t pos, Node* n);
-int8_t internal_add_node(List* l, void *v, uint32_t pos, Node* n);
+int8_t add_pos_node(List* l, void *v, uint32_t pos, Node* n);
 
-// Delete a node form the list
-// Delete an non dinamic node
-int8_t internal_delete_node(List* l, void **v, uint32_t pos, Node** fnode);
-uint8_t delete_node(List* l, void **v, uint32_t pos);
-uint8_t delete_d_node(List* l, void **v, uint32_t pos);
+// Delete a node form the list with the position
+// Delete an non dinamic node with the position
+uint8_t delete_pos_node(List* l, void **v, uint32_t pos);
+uint8_t delete_d_pos_node(List* l, void **v, uint32_t pos);
+
+// Delete a node form the list in last position
+// Delete an non dinamic node in last position
+uint8_t delete_node(List* l, void **v);
+uint8_t delete_d_node(List* l, void **v);
 
 // Get the total of nodes of the list 
 int8_t get_total_nodes(List* l);
