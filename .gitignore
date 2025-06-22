@@ -1,1 +1,4 @@
+# Los ficheros van cada uno en una linea diferente
 main
+.cache/*
+compile_commands.json
