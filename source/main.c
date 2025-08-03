@@ -3,120 +3,124 @@
 #include <stdint.h>
 #include <assert.h>
 
-#include "List.h"
-#include "Stack.h"
-#include "Queue.h"
+#include "list.h"
+#include "stack.h"
+#include "queue.h"
 #include "sorting.h"
+
+#define LIST_DYNAMIC_NODES
 
 void check_list_functionality()
 {
-	List l;
+	list_t l;
 
-	assert(init_list(&l) == 0);
+	assert(!list_init_list(&l));
 
 	int a[5] = {456, -43, 0, 1234, 98176};
-	assert(add_d_pos_node(&l, (void *)&a[0], 0) == 0);
-	assert(add_d_pos_node(&l, (void *)&a[1], 2) == 0);
-	assert(add_d_pos_node(&l, (void *)&a[4], 0) == 0);
-	assert(add_d_pos_node(&l, (void *)&a[2], 0) == 0);
-	assert(add_d_pos_node(&l, (void *)&a[1], 0) == 0);
+	assert(!list_add_d_pos_node(&l, (void *)&a[0], 0));
+	assert(!list_add_d_pos_node(&l, (void *)&a[1], 2));
+	assert(!list_add_d_pos_node(&l, (void *)&a[4], 0));
+	assert(!list_add_d_pos_node(&l, (void *)&a[2], 0));
+	assert(!list_add_d_pos_node(&l, (void *)&a[1], 0));
 
-	assert(add_d_pos_node(&l, (void *)&a[3], 100) == 0);
-	assert(add_d_pos_node(&l, (void *)&a[1], 1) == 0);
-	assert(add_d_pos_node(&l, (void *)&a[2], 2) == 0);
+	assert(!list_add_d_pos_node(&l, (void *)&a[3], 100));
+	assert(!list_add_d_pos_node(&l, (void *)&a[1], 1));
+	assert(!list_add_d_pos_node(&l, (void *)&a[2], 2));
 	
-	assert(get_total_nodes(&l) < 1004);
+	assert(list_get_total_nodes(&l) < 127);
 #if defined LIST_DEBUG
-	print_node_list_value(&l);
+	list_print_node_list_value(&l);
 #endif
 
 	int *ptr = NULL;
-	assert(get_value(&l, (void **)&ptr, 0) == 0);
+	printf("Start to check nodes\n");
+	assert(!list_get_value(&l, (void **)&ptr, 0));
 	printf("Pos: %d - Value obtained: %d\n", 0, *ptr);
 	
-	assert(get_value(&l, (void **)&ptr, 1) == 0);
+	assert(!list_get_value(&l, (void **)&ptr, 1));
 	printf("Pos: %d - Value obtained: %d\n", 1, *ptr);
 	
-	assert(get_value(&l, (void **)&ptr, 2) == 0);
+	assert(!list_get_value(&l, (void **)&ptr, 2));
 	printf("Pos: %d - Value obtained: %d\n", 2, *ptr);
 	
-	assert(get_value(&l, (void **)&ptr, 3) == 0);
+	assert(!list_get_value(&l, (void **)&ptr, 3));
 	printf("Pos: %d - Value obtained: %d\n", 3, *ptr);
 	
-	assert(get_value(&l, (void **)&ptr, 4) == 0);
+	assert(!list_get_value(&l, (void **)&ptr, 4));
 	printf("Pos: %d - Value obtained: %d\n", 4, *ptr);
 	
-	assert(get_value(&l, (void **)&ptr, 5) == 0);
+	assert(!list_get_value(&l, (void **)&ptr, 5));
 	printf("Pos: %d - Value obtained: %d\n", 5, *ptr);
 	
-	assert(get_value(&l, (void **)&ptr, 6) == 0);
+	assert(!list_get_value(&l, (void **)&ptr, 6));
 	printf("Pos: %d - Value obtained: %d\n", 6, *ptr);
 	
-	assert(get_value(&l, (void **)&ptr, 7) == 0);
-	printf("Pos: %d - Value obtained: %d\n", 7, *ptr);
-	
-	assert(delete_d_pos_node(&l, (void **)&ptr, 7) == 0);
+	assert(!list_get_value(&l, (void **)&ptr, 7));
 	printf("Pos: %d - Value obtained: %d\n", 7, *ptr);
 
-	assert(delete_d_pos_node(&l, (void **)&ptr, 6) == 0);
+	printf("Start to delete nodes\n");
+	assert(!list_delete_d_pos_node(&l, (void **)&ptr, 7));
+	printf("Pos: %d - Value obtained: %d\n", 7, *ptr);
+
+	assert(!list_delete_d_pos_node(&l, (void **)&ptr, 6));
 	printf("Pos: %d - Value obtained: %d\n", 6, *ptr);
 	
-	assert(delete_d_pos_node(&l, (void **)&ptr, 5) == 0);
+	assert(!list_delete_d_pos_node(&l, (void **)&ptr, 5));
 	printf("Pos: %d - Value obtained: %d\n", 5, *ptr);
 	
-	assert(delete_d_pos_node(&l, (void **)&ptr, 4) == 0);
+	assert(!list_delete_d_pos_node(&l, (void **)&ptr, 4));
 	printf("Pos: %d - Value obtained: %d\n", 4, *ptr);
 
-	assert(delete_d_pos_node(&l, (void **)&ptr, 3) == 0);
+	assert(!list_delete_d_pos_node(&l, (void **)&ptr, 3));
 	printf("Pos: %d - Value obtained: %d\n", 3, *ptr);
 
-	assert(delete_d_pos_node(&l, (void **)&ptr, 2) == 0);
+	assert(!list_delete_d_pos_node(&l, (void **)&ptr, 2));
 	printf("Pos: %d - Value obtained: %d\n", 2, *ptr);
 	
-	assert(delete_d_pos_node(&l, (void **)&ptr, 1) == 0);
+	assert(!list_delete_d_pos_node(&l, (void **)&ptr, 1));
 	printf("Pos: %d - Value obtained: %d\n", 1, *ptr);
 	
-	assert(delete_d_pos_node(&l, (void **)&ptr, 0) == 0);
+	assert(!list_delete_d_pos_node(&l, (void **)&ptr, 0));
 	printf("Pos: %d - Value obtained: %d\n", 0, *ptr);
 
-	assert(add_d_pos_node(&l, (void *)&a[1], 2) == 0);
-	assert(add_d_pos_node(&l, (void *)&a[4], 0) == 0);
+	assert(!list_add_d_pos_node(&l, (void *)&a[1], 2));
+	assert(!list_add_d_pos_node(&l, (void *)&a[4], 0));
 #if defined LIST_DEBUG
-	print_node_list_value(&l);
+	list_print_node_list_value(&l);
 #endif
 	return;
 }
 
 void check_stack_functionality()
 {
-	Stack s;
+	stack_t s;
 	int a[5] = {456, -43, 0, 1234, 98176};
 	
-	assert(init_stack(&s) == 0);
+	assert(!stack_init_stack(&s));
 
-	assert(stack_d_value(&s, (void *)&a[0]) == 0); 
-	assert(stack_d_value(&s, (void *)&a[1]) == 0); 
-	assert(stack_d_value(&s, (void *)&a[2]) == 0); 
-	assert(stack_d_value(&s, (void *)&a[3]) == 0); 
-	assert(stack_d_value(&s, (void *)&a[4]) == 0); 
+	assert(!stack_stack_d_value(&s, (void *)&a[0])); 
+	assert(!stack_stack_d_value(&s, (void *)&a[1])); 
+	assert(!stack_stack_d_value(&s, (void *)&a[2])); 
+	assert(!stack_stack_d_value(&s, (void *)&a[3])); 
+	assert(!stack_stack_d_value(&s, (void *)&a[4])); 
 
 	int *ptr = NULL;
-	assert(unstack_d_value(&s, (void **)&ptr) == 0);
+	assert(!stack_unstack_d_value(&s, (void **)&ptr));
 	printf("Value unstacked is %d\n", *ptr);
 
-	assert(unstack_d_value(&s, (void **)&ptr) == 0);
+	assert(!stack_unstack_d_value(&s, (void **)&ptr));
 	printf("Value unstacked is %d\n", *ptr);
 	
-	assert(unstack_d_value(&s, (void **)&ptr) == 0);
+	assert(!stack_unstack_d_value(&s, (void **)&ptr));
 	printf("Value unstacked is %d\n", *ptr);
 	
-	assert(unstack_d_value(&s, (void **)&ptr) == 0);
+	assert(!stack_unstack_d_value(&s, (void **)&ptr));
 	printf("Value unstacked is %d\n", *ptr);
 
-	assert(unstack_d_value(&s, (void **)&ptr) == 0);
+	assert(!stack_unstack_d_value(&s, (void **)&ptr));
 	printf("Value unstacked is %d\n", *ptr);
 	
-	assert(unstack_d_value(&s, (void **)&ptr) == 0);
+	assert(!stack_unstack_d_value(&s, (void **)&ptr));
 	printf("Value must be the same, the stack is empty: %d\n", *ptr);
 	
 	return;
@@ -124,37 +128,36 @@ void check_stack_functionality()
 
 void check_queue_functionality()
 {
-	Queue q;
+	queue_t q;
 
-	assert(init_queue(&q) == 0);
+	assert(!queue_init_queue(&q));
 	int a[5] = {456, -43, 0, 1234, 98176};
   
-	get_total_nodes(&q);
-	assert(queue_d_value(&q, (void *)&a[3]) == 0);
-	assert(queue_d_value(&q, (void *)&a[4]) == 0);
-	assert(queue_d_value(&q, (void *)&a[0]) == 0);
-	assert(queue_d_value(&q, (void *)&a[1]) == 0);
-	assert(queue_d_value(&q, (void *)&a[2]) == 0);
+	queue_get_queue_size(&q);
+	assert(!queue_queue_d_value(&q, (void *)&a[3]));
+	assert(!queue_queue_d_value(&q, (void *)&a[4]));
+	assert(!queue_queue_d_value(&q, (void *)&a[0]));
+	assert(!queue_queue_d_value(&q, (void *)&a[1]));
+	assert(!queue_queue_d_value(&q, (void *)&a[2]));
 
 	int* ptr = NULL;
-	assert(unqueue_value(&q, (void **)&ptr) == 0);
+	assert(!queue_unqueue_value(&q, (void **)&ptr));
 	printf("Value unqueue is %d\n", *ptr);
 	
-	assert(unqueue_value(&q, (void **)&ptr) == 0);
+	assert(!queue_unqueue_value(&q, (void **)&ptr));
 	printf("Value unqueue is %d\n", *ptr);
 	
-	assert(unqueue_value(&q, (void **)&ptr) == 0);
+	assert(!queue_unqueue_value(&q, (void **)&ptr));
 	printf("Value unqueue is %d\n", *ptr);
 	
-	assert(unqueue_value(&q, (void **)&ptr) == 0);
+	assert(!queue_unqueue_value(&q, (void **)&ptr));
 	printf("Value unqueue is %d\n", *ptr);
 	
-	assert(unqueue_value(&q, (void **)&ptr) == 0);
+	assert(!queue_unqueue_value(&q, (void **)&ptr));
 	printf("Value unqueue is %d\n", *ptr);
 	
-	assert(unqueue_value(&q, (void **)&ptr) == 0);
+	assert(!queue_unqueue_value(&q, (void **)&ptr));
 	printf("Couldn't unqueue more values, queue are empty: %d\n", *ptr);
-
 
 	return;
 }
@@ -178,46 +181,49 @@ int compare_two_elements(void* a, void* b)
 
 void check_sorting_functionality()
 {
-	List l;
+	list_t l;
 
-	assert(init_list(&l) == 0);
+	assert(!list_init_list(&l));
 
 	int a[8] = {38, 27, 43, 3, 9, 82, 10};
 	
-	assert(add_d_pos_node(&l, (void *)&a[0], 0) == 0);
-	assert(add_d_pos_node(&l, (void *)&a[1], 1) == 0);
-	assert(add_d_pos_node(&l, (void *)&a[2], 2) == 0);
-	assert(add_d_pos_node(&l, (void *)&a[3], 3) == 0);
-	assert(add_d_pos_node(&l, (void *)&a[4], 4) == 0);
-	assert(add_d_pos_node(&l, (void *)&a[5], 5) == 0);
-	assert(add_d_pos_node(&l, (void *)&a[6], 6) == 0);
+	assert(!list_add_d_pos_node(&l, (void *)&a[0], 0));
+	assert(!list_add_d_pos_node(&l, (void *)&a[1], 1));
+	assert(!list_add_d_pos_node(&l, (void *)&a[2], 2));
+	assert(!list_add_d_pos_node(&l, (void *)&a[3], 3));
+	assert(!list_add_d_pos_node(&l, (void *)&a[4], 4));
+	assert(!list_add_d_pos_node(&l, (void *)&a[5], 5));
+	assert(!list_add_d_pos_node(&l, (void *)&a[6], 6));
 
-	print_node_list_value(&l);
+#if defined LIST_DEBUG
+	list_print_node_list_value(&l);
+#endif
+
 #if 0
 #if defined LIST_DEBUG
 	printf("Before the swap\n");
-	print_node_list_value(&l);
+	list_print_node_list_value(&l);
 #endif
 	
-	swap_nodes_by_pos(1, 6, &l);
+	list_swap_nodes_by_pos(1, 6, &l);
 
 #if defined LIST_DEBUG
 	printf("After the swap\n");
-	print_node_list_value(&l);
+	list_print_node_list_value(&l);
 #endif
 
-	move_node_by_pos(5, 0, &l);
+	list_move_node_by_pos(5, 0, &l);
 
 #if defined LIST_DEBUG
 	printf("After the move\n");
-	print_node_list_value(&l);
+	list_print_node_list_value(&l);
 #endif
 
-	move_node_by_pos(1, , &l);
+	list_move_node_by_pos(1, , &l);
 
 #if defined LIST_DEBUG
 	printf("After the move\n");
-	print_node_list_value(&l);
+	list_print_node_list_value(&l);
 #endif
 #endif
 
@@ -225,7 +231,7 @@ void check_sorting_functionality()
 	mergeSort(&l, 0, 6, &compare_two_elements);
 #if defined LIST_DEBUG
 	printf("After the sort\n");
-	print_node_list_value(&l);
+	list_print_node_list_value(&l);
 #endif
 #endif
 	return;
@@ -233,10 +239,10 @@ void check_sorting_functionality()
 
 int main(int argc, char* argv[])
 {
-	//check_list_functionality();
-	//check_stack_functionality();
-	//check_queue_functionality();
-	check_sorting_functionality();
+	check_list_functionality();
+	check_stack_functionality();
+	check_queue_functionality();
+	//check_sorting_functionality();
 
 	printf("End process\n");
 	return EXIT_SUCCESS;
