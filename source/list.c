@@ -58,15 +58,15 @@ static int8_t list_internal_delete_node(list_t *l,
 	/* Save node's information and save
 	 * the memory address if it is needed
 	 */
-	aux->next = aux->prev = NULL;
 	*v = aux->data;
+	memset(aux, 0, sizeof(node_t));
 
 	if(fnode)
 		*fnode = aux;
 	l->n_elems--;
 
 	if(!l->n_elems)
-		l->init = l->last = NULL;
+		memset(l, 0, sizeof(list_t));
 
 	return 0;
 }
@@ -126,6 +126,15 @@ node_t * list_get_node(list_t *l, int pos)
 	return n;
 }
 
+int8_t list_swap_nodes_data(node_t* node1, node_t* node2)
+{
+	void *ptr = node1->data;
+	node1->data = node2->data;
+	node2->data = ptr;
+
+	return 0;
+}
+
 int8_t list_swap_nodes_by_pos(list_t *l, uint32_t pos1, uint32_t pos2)
 {
 	node_t * n1 = NULL;
@@ -175,7 +184,7 @@ int8_t list_move_node_by_pos(list_t *l, uint32_t node_pos, uint32_t final_pos)
 
 #ifdef LIST_DEBUG
 	printf("After move node\n");
-	print_node_list_value(l);
+	list_print_list_nodes_values(l);
 #endif
 
 	return 0;
@@ -214,7 +223,7 @@ uint8_t list_delete_d_pos_node(list_t *l, void **v, uint32_t pos)
 #endif /* LIST_DYNAMIC_NODES */
 
 #ifdef LIST_DEBUG 
-void list_print_nodes_values(list_t *l)
+void list_print_list_nodes_values(list_t *l)
 {
 	node_t * n = l->init;
 	uint32_t i = 0;

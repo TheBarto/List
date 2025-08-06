@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-//#define LIST_DEBUG
+#define LIST_DEBUG
 #define LIST_DYNAMIC_NODES
 
 #define GET_NODE_LIST(node, pos) \
@@ -114,6 +114,8 @@ int8_t list_swap_nodes_by_pos(list_t *l, uint32_t pos1, uint32_t pos2);
  */
 int8_t list_move_node_by_pos(list_t *l, uint32_t node_pos, uint32_t final_pos);
 
+int8_t list_swap_nodes_data(node_t* node1, node_t* node2);
+
 #ifdef LIST_DYNAMIC_NODES
 /**
  * @brief Add a dynamic node at the end of the list
@@ -157,7 +159,7 @@ uint8_t list_delete_d_pos_node(list_t *l, void **v, uint32_t pos);
  * @brief Prints all list's elements as integers
  * @param l list
  */
-void print_node_list_value(list_t * l);
+void list_print_list_nodes_values(list_t * l);
 #endif /* LIST_DEBUG */
 
 #endif //LIST
