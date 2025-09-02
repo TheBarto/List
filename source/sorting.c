@@ -20,14 +20,14 @@ static int8_t compare_int32_elements(void* a, void* b)
 
 static inline node_t* sorting_first_node_pivot(list_t *l, uint32_t init_pos)
 {
-	node_t *node = l->init;
+	node_t *node = list_init_node(l);
 	GET_NODE_LIST(node, init_pos);
 	return node;
 }
 
 static inline node_t* sorting_last_node_pivot(list_t *l, uint32_t end_pos)
 {
-	node_t *node = l->init;
+	node_t *node = list_init_node(l);
 	GET_NODE_LIST(node, end_pos);
 	return node;
 }

@@ -13,21 +13,21 @@ static int8_t list_internal_add_node(list_t *l,
 	memset(n, 0, sizeof(node_t));
 	n->data = v;
 
-	if (!l->init) {
-		l->init = n;
-		l->last = n;
+	if (!list_init_node(l)) {
+		list_init_node(l) = n;
+		list_last_node(l) = n;
 	} else if(pos >= l->n_elems) {
-		n->prev = l->last;
+		n->prev = list_last_node(l);
 		n->prev->next = n;
-		l->last = n;
+		list_last_node(l) = n;
 	} else {
-		node_t * aux = l->init;
+		node_t * aux = list_init_node(l);
 		GET_NODE_LIST(aux, pos);
 
 		n->next = aux;
 		/* Check if exists a previous of the current node,
 		 * otherwise we're at the first position */
-		(aux->prev) ? (aux->prev->next = n) : (l->init = n);
+		(aux->prev) ? (aux->prev->next = n) : (list_init_node(l) = n);
 		n->prev = aux->prev;
 		aux->prev = n;
 	}
@@ -46,14 +46,14 @@ static int8_t list_internal_delete_node(list_t *l,
 	else if(!l->n_elems)
 		return 0;
 
-	node_t *aux = l->init;
+	node_t *aux = list_init_node(l);
 	GET_NODE_LIST(aux, pos);
 
 	/* Reorganize the previous and next pointer
 	 * of the list after removing a node
 	 */
-	(!aux->next) ? (l->last = aux->prev) : (aux->next->prev = aux->prev);
-	(!aux->prev) ? (l->init = aux->next) : (aux->prev->next = aux->next);
+	(!aux->next) ? (list_last_node(l) = aux->prev) : (aux->next->prev = aux->prev);
+	(!aux->prev) ? (list_init_node(l) = aux->next) : (aux->prev->next = aux->next);
 
 	/* Save node's information and save
 	 * the memory address if it is needed
@@ -110,7 +110,7 @@ int8_t list_get_value(list_t *l, void **v, uint32_t pos)
 	if(!l || !v || (pos >= l->n_elems))
 		return -1;
 
-	node_t * n = l->init;
+	node_t * n = list_init_node(l);
 
 	GET_NODE_LIST(n, pos);
 	*v = n->data;
@@ -120,7 +120,7 @@ int8_t list_get_value(list_t *l, void **v, uint32_t pos)
 
 node_t * list_get_node(list_t *l, int pos)
 {
-	node_t * n = l->init;
+	node_t * n = list_init_node(l);
 	GET_NODE_LIST(n, pos);
 
 	return n;
@@ -139,7 +139,7 @@ int8_t list_swap_nodes_by_pos(list_t *l, uint32_t pos1, uint32_t pos2)
 {
 	node_t * n1 = NULL;
 	node_t * n2 = NULL;
-	node_t * n_aux = l->init;
+	node_t * n_aux = list_init_node(l);
 
 	for(uint32_t i = 0;
 	    ((i < l->n_elems) && ((!n1) || (!n2)));
@@ -159,7 +159,7 @@ int8_t list_swap_nodes_by_pos(list_t *l, uint32_t pos1, uint32_t pos2)
 
 int8_t list_move_node_by_pos(list_t *l, uint32_t node_pos, uint32_t final_pos)
 {
-	node_t * n_aux = l->init;
+	node_t * n_aux = list_init_node(l);
 	node_t * n_move = NULL;
 	node_t * n_fin_pos = NULL;
 	for(uint32_t i = 0; 
@@ -173,14 +173,14 @@ int8_t list_move_node_by_pos(list_t *l, uint32_t node_pos, uint32_t final_pos)
 	}
 
 	// Extract the node from this actual position
-	(n_move->prev) ? (n_move->prev->next = n_move->next) : (l->init = n_move->next);
-	(n_move->next) ? (n_move->next->prev = n_move->prev) : (l->last = n_move->prev);
+	(n_move->prev) ? (n_move->prev->next = n_move->next) : (list_init_node(l) = n_move->next);
+	(n_move->next) ? (n_move->next->prev = n_move->prev) : (list_last_node(l) = n_move->prev);
 
 	// Set the node in the new position
 	n_move->next = n_fin_pos;
 	n_move->prev = n_fin_pos->prev;
-	(n_move->next) ? (n_move->next->prev = n_move) : (l->last=n_move);
-	(n_move->prev) ? (n_move->prev->next = n_move) : (l->init=n_move);
+	(n_move->next) ? (n_move->next->prev = n_move) : (list_last_node(l)=n_move);
+	(n_move->prev) ? (n_move->prev->next = n_move) : (list_init_node(l)=n_move);
 
 #ifdef LIST_DEBUG
 	printf("After move node\n");
@@ -225,7 +225,7 @@ uint8_t list_delete_d_pos_node(list_t *l, void **v, uint32_t pos)
 #ifdef LIST_DEBUG 
 void list_print_list_nodes_values(list_t *l)
 {
-	node_t * n = l->init;
+	node_t * n = list_init_node(l);
 	uint32_t i = 0;
 
 	while(n)

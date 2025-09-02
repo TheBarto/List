@@ -12,7 +12,7 @@
 do{ \
 	for(uint32_t i = 0; ((i < pos) && (node)); i++, node = node->next); \
 }while(0)
-
+/*
 typedef struct node_t {
 	struct node_t *next;
 	struct node_t *prev;
@@ -24,6 +24,30 @@ typedef struct list_t {
 	node_t *last;
 	uint32_t n_elems;
 } list_t;
+*/
+// Posible mejora de lista:
+/* Solo tenemos un tipo de struct, y podemos emplear un nodo como list_t
+ * y el resto como nodos. Queda mas compacto, aunque tambien gastariamos un
+ * poco mas de memoria segun el tamaño del ptr a void.
+ *
+ * Si es menor al uint16_t, gastamos un poco mas, sino seguimos igual.
+ */
+#define list_init_node(n) (n->next)
+#define list_last_node(n) (n->prev)
+#define list_data_ptr(n)  (n->data)
+#define list_n_elems(n)   (n->n_elems)
+
+typedef struct node_t {
+	struct node_t *next;
+	struct node_t *prev;
+	union{
+		void *data;
+		uint16_t n_elems;
+	};
+} node_t;
+
+typedef node_t list_t;
+/**/
 
 /**
  * @brief Basic list initializaction
